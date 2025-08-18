@@ -55,12 +55,12 @@ Public Class DataBaseHelper
     '    End Using
     'End Sub
 
-    Public Function VerificarCredenciales(cliente As Paciente) As Boolean
+    Public Function VerificarCredenciales(paciente As Paciente) As Boolean
         Using connection As New SqlConnection(connectionString)
             connection.Open()
             Dim command As New SqlCommand("SELECT  Usuario,Contraseña  FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña", connection)
-            command.Parameters.AddWithValue("@Usuario", cliente.Email)
-            command.Parameters.AddWithValue("@Contraseña", cliente.Contraseña)
+            command.Parameters.AddWithValue("@Usuario", paciente.Email)
+            command.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
             Dim reader As SqlDataReader = command.ExecuteReader()
             Return reader.HasRows
         End Using
