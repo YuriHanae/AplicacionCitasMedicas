@@ -1,4 +1,6 @@
-﻿Public Class Cita
+﻿Imports System
+
+Public Class Cita
     Public Property Id As Integer
     Public Property Fecha As DateTime
     Public Property Hora As TimeSpan
