@@ -14,11 +14,11 @@ Option Explicit On
 Partial Public Class frmAdmin
 
     '''<summary>
-    '''Control lblMenj.
+    '''Control lblMen.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblMenj As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblMen As Global.System.Web.UI.WebControls.Label
 End Class
