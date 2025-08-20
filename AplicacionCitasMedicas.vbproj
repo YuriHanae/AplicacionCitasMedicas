@@ -145,6 +145,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
+    <Content Include="frmAdmin.aspx" />
+    <Content Include="frmPaciente.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="Registrar.aspx" />
@@ -233,6 +235,20 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Doctor.vb" />
+    <Compile Include="frmAdmin.aspx.designer.vb">
+      <DependentUpon>frmAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdmin.aspx.vb">
+      <DependentUpon>frmAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="frmPaciente.aspx.designer.vb">
+      <DependentUpon>frmPaciente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="frmPaciente.aspx.vb">
+      <DependentUpon>frmPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -241,7 +257,7 @@
     </Compile>
     <Compile Include="Login.aspx.vb">
       <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

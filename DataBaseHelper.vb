@@ -58,11 +58,27 @@ Public Class DataBaseHelper
     Public Function VerificarCredenciales(paciente As Paciente) As Boolean
         Using connection As New SqlConnection(connectionString)
             connection.Open()
-            Dim command As New SqlCommand("SELECT  Usuario,Contraseña  FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña", connection)
+            Dim command As New SqlCommand("SELECT  Usuario,Contraseña  FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña AND ROL = @Rol", connection)
             command.Parameters.AddWithValue("@Usuario", paciente.Email)
             command.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
+            command.Parameters.AddWithValue("@Rol", paciente.Rol)
             Dim reader As SqlDataReader = command.ExecuteReader()
             Return reader.HasRows
         End Using
+    End Function
+
+    Public Function ObtenerRolDeBaseDeDatos(paciente As Paciente)
+        Dim rol As String = Nothing
+        Using conn As New SqlConnection(connectionString)
+            conn.Open()
+            Dim cmd As New SqlCommand("SELECT Rol FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña", conn)
+            cmd.Parameters.AddWithValue("@Usuario", paciente.Usuario)
+            cmd.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
+            Dim reader As SqlDataReader = cmd.ExecuteReader()
+            Return reader("Rol").ToString()
+
+        End Using
+
+        Return rol
     End Function
 End Class

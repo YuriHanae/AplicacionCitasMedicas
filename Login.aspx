@@ -5,8 +5,8 @@
                 <h1 class="h3 mb-3 fw-normal">Iniciar Sesion</h1>
 
                 <div class="form-floating">
-                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" TextMode="SingleLine" placeholder="Email"></asp:TextBox>
-                    <label for="MainContent_txtEmail">Email address</label>
+                    <asp:TextBox ID="txtUsuario" runat="server" CssClass="form-control" TextMode="SingleLine"></asp:TextBox>
+                    <label for="MainContent_txtUsuario">Usuario</label>
                 </div>
 
                 <div class="form-floating">

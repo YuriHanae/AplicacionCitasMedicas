@@ -7,4 +7,5 @@
     Public Property Email As String
     Public Property Usuario As String
     Public Property Contraseña As String
+    Public Property Rol As String
 End Class
