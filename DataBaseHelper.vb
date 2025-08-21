@@ -59,7 +59,7 @@ Public Class DataBaseHelper
         Using connection As New SqlConnection(connectionString)
             connection.Open()
             Dim command As New SqlCommand("SELECT  Usuario,Contraseña  FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña AND ROL = @Rol", connection)
-            command.Parameters.AddWithValue("@Usuario", paciente.Email)
+            command.Parameters.AddWithValue("@Usuario", paciente.Usuario)
             command.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
             command.Parameters.AddWithValue("@Rol", paciente.Rol)
             Dim reader As SqlDataReader = command.ExecuteReader()
@@ -67,18 +67,19 @@ Public Class DataBaseHelper
         End Using
     End Function
 
-    Public Function ObtenerRolDeBaseDeDatos(paciente As Paciente)
-        Dim rol As String = Nothing
+    Public Function ObtenerRolDeBaseDeDatos(usuario As String, contra As String) As String
         Using conn As New SqlConnection(connectionString)
             conn.Open()
             Dim cmd As New SqlCommand("SELECT Rol FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña", conn)
-            cmd.Parameters.AddWithValue("@Usuario", paciente.Usuario)
-            cmd.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
+            cmd.Parameters.AddWithValue("@Usuario", usuario)
+            cmd.Parameters.AddWithValue("@Contraseña", contra)
             Dim reader As SqlDataReader = cmd.ExecuteReader()
-            Return reader("Rol").ToString()
 
+            If reader.Read() Then
+                Return reader("Rol").ToString()
+            Else
+                Return Nothing ' o String.Empty
+            End If
         End Using
-
-        Return rol
     End Function
 End Class

@@ -9,7 +9,14 @@ Public Class Login
 
     Protected Sub btnLogin_Click(sender As Object, e As EventArgs)
         If VerificarCredenciales() Then
-            Response.Redirect("Default.aspx")
+            ' Asignar el rol a la sesión
+            Session("Rol") = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, txtPass.Text)
+
+            If (Session("Rol") = "Admin") Then
+                Response.Redirect("frmAdmin.aspx")
+            ElseIf (Session("Rol") = "Paciente") Then
+                Response.Redirect("frmPaciente.aspx")
+            End If
         Else
             lblError.Text = "Credenciales inválidas"
             lblError.Visible = True
@@ -18,21 +25,13 @@ Public Class Login
 
     Protected Function VerificarCredenciales() As Boolean
 
+        Dim rol As String = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, txtPass.Text)
         Dim paciente As New Paciente With {
             .Usuario = txtUsuario.Text.Trim(),
             .Contraseña = txtPass.Text.Trim(),
-            .Rol = bd.ObtenerRolDeBaseDeDatos(paciente)
+            .Rol = rol
         }
-        If (Session("Rol") = "Admin") Then
-            Response.Redirect("frmAdmin.aspx")
-
-        ElseIf (Session("Rol") = "Paciente") Then
-            Response.Redirect("frmPaciente.aspx")
-        End If
-
-
-        Dim helper As New DataBaseHelper()
-        Return helper.VerificarCredenciales(paciente)
+        Return bd.VerificarCredenciales(paciente)
     End Function
 
 
