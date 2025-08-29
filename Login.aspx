@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="Login.aspx.vb" Inherits="AplicacionCitasMedicas.Login" %>
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="frmAdmin.aspx.vb" Inherits="AplicacionCitasMedicas.Login" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
         <div class="d-flex align-items-center py-4 bg-body-tertiary">
             <main class="form-signin w-100 m-auto">

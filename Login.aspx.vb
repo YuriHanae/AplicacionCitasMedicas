@@ -9,8 +9,9 @@ Public Class Login
 
     Protected Sub btnLogin_Click(sender As Object, e As EventArgs)
         If VerificarCredenciales() Then
-            ' Asignar el rol a la sesión
+            ' Asignar el rol y el usuario a la sesión
             Session("Rol") = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, txtPass.Text)
+            Session("Usuario") = txtUsuario.Text.Trim()
 
             If (Session("Rol") = "Admin") Then
                 Response.Redirect("frmAdmin.aspx")
@@ -30,7 +31,7 @@ Public Class Login
         Dim pass As String = wrapper.EncryptData(txtPass.Text)
         Dim paciente As New Paciente With {
             .Usuario = txtUsuario.Text.Trim(),
-            .Contraseña = pass,
+            .Contraseña = txtPass.Text,
             .Rol = rol
         }
         Return bd.VerificarCredenciales(paciente)

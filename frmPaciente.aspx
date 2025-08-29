@@ -67,15 +67,9 @@
     <!-- Panel para Mostrar Citas -->
     <asp:Panel ID="pnlMostrarCitas" runat="server" Visible="false">
         <h4>Historial de Citas</h4>
-        <asp:GridView ID="gvCitas" runat="server" CssClass="table table-striped" AutoGenerateColumns="False" DataKeyNames="Id">
-            <Columns>
-                <asp:BoundField DataField="Id" HeaderText="ID" />
-                <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:yyyy-MM-dd}" />
-                <asp:BoundField DataField="Hora" HeaderText="Hora" DataFormatString="{0:hh\\:mm}" />
-                <asp:BoundField DataField="NombreDoctor" HeaderText="Doctor" />
-                <asp:BoundField DataField="Estado" HeaderText="Estado" />
-                <asp:BoundField DataField="Observaciones" HeaderText="Observaciones" />
-            </Columns>
+        <asp:GridView ID="gvDatos" runat="server"
+            DataKeyNames ="Id">  
+
         </asp:GridView>
     </asp:Panel>
 

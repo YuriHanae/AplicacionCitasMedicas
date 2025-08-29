@@ -11,6 +11,7 @@ Public Class frmPaciente
             End If
             lblNombrePaciente.Text = Session("NombrePaciente")
             OcultarTodosLosPaneles()
+            MostrarCitasPaciente()
         End If
     End Sub
 
@@ -60,6 +61,7 @@ Public Class frmPaciente
 
     Protected Sub btnGuardarCita_Click(sender As Object, e As EventArgs)
         Try
+            Session("IdPaciente") = bd.ObtenerIdPaciente(Session("Usuario")) ' Asignamos el IdPaciente desde la base de datos
             Dim idPaciente As Integer = Session("IdPaciente")
             Dim idDoctor As Integer = Integer.Parse(ddlDoctor.SelectedValue)
             Dim fecha As Date = Date.Parse(txtFecha.Text)
@@ -68,11 +70,12 @@ Public Class frmPaciente
 
             Using cn As New SqlConnection(ConfigurationManager.ConnectionStrings("Login").ConnectionString)
                 cn.Open()
-                Dim cmd As New SqlCommand("INSERT INTO Citas (Fecha, Hora, IdPaciente, IdDoctor, Observaciones) VALUES (@Fecha, @Hora, @IdPaciente, @IdDoctor, @Obs)", cn)
+                Dim cmd As New SqlCommand("INSERT INTO Citas (Fecha, Hora, IdPaciente, IdDoctor, Estado, Observaciones) VALUES (@Fecha, @Hora, @IdPaciente, @IdDoctor, @Estado, @Obs)", cn)
                 cmd.Parameters.AddWithValue("@Fecha", fecha)
                 cmd.Parameters.AddWithValue("@Hora", hora)
                 cmd.Parameters.AddWithValue("@IdPaciente", idPaciente)
                 cmd.Parameters.AddWithValue("@IdDoctor", idDoctor)
+                cmd.Parameters.AddWithValue("@Estado", "Pendiente")
                 cmd.Parameters.AddWithValue("@Obs", obs)
                 cmd.ExecuteNonQuery()
             End Using
@@ -89,9 +92,11 @@ Public Class frmPaciente
     Protected Sub btnBuscarCita_Click(sender As Object, e As EventArgs)
         Dim idCita As Integer
         If Integer.TryParse(txtBuscarIdCita.Text, idCita) Then
+
             Using cn As New SqlConnection(ConfigurationManager.ConnectionStrings("Login").ConnectionString)
                 cn.Open()
-                Dim cmd As New SqlCommand("SELECT Fecha, Hora, Observaciones FROM Citas WHERE Id = @Id AND IdPaciente = @IdPaciente", cn)
+                Session("IdPaciente") = bd.ObtenerIdPaciente(Session("Usuario"))
+                Dim cmd As New SqlCommand("SELECT Fecha, Hora, Estado ,Observaciones FROM Citas WHERE Id = @Id AND IdPaciente = @IdPaciente", cn)
                 cmd.Parameters.AddWithValue("@Id", idCita)
                 cmd.Parameters.AddWithValue("@IdPaciente", Session("IdPaciente"))
                 Dim reader As SqlDataReader = cmd.ExecuteReader()
@@ -117,6 +122,7 @@ Public Class frmPaciente
         Dim idCita As Integer = CInt(Session("CitaEditarId"))
         Using cn As New SqlConnection(ConfigurationManager.ConnectionStrings("Login").ConnectionString)
             cn.Open()
+            Session("IdPaciente") = bd.ObtenerIdPaciente(Session("Usuario"))
             Dim cmd As New SqlCommand("UPDATE Citas SET Fecha=@Fecha, Hora=@Hora, Observaciones=@Obs WHERE Id=@Id AND IdPaciente=@IdPaciente", cn)
             cmd.Parameters.AddWithValue("@Fecha", Date.Parse(txtEditFecha.Text))
             cmd.Parameters.AddWithValue("@Hora", TimeSpan.Parse(txtEditHora.Text))
@@ -134,18 +140,13 @@ Public Class frmPaciente
         Dim dt As New DataTable()
         Using cn As New SqlConnection(ConfigurationManager.ConnectionStrings("Login").ConnectionString)
             cn.Open()
-            Dim cmd As New SqlCommand("
-                SELECT Citas.Id, Citas.Fecha, Citas.Hora, Doctores.Nombre AS NombreDoctor, Citas.Estado, Citas.Observaciones
-                FROM Citas 
-                INNER JOIN Doctores ON Citas.IdDoctor = Doctores.Id
-                WHERE IdPaciente = @IdPaciente
-                ORDER BY Citas.Fecha DESC, Citas.Hora DESC", cn)
-            cmd.Parameters.AddWithValue("@IdPaciente", Session("IdPaciente"))
+            Dim cmd As New SqlCommand("SELECT * FROM Citas", cn)
+            'cmd.Parameters.AddWithValue("@IdPaciente", Session("IdPaciente"))
             Dim da As New SqlDataAdapter(cmd)
             da.Fill(dt)
         End Using
-        gvCitas.DataSource = dt
-        gvCitas.DataBind()
+        gvDatos.DataSource = dt
+        gvDatos.DataBind()
     End Sub
 
 End Class
