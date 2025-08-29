@@ -10,8 +10,9 @@ Public Class frmPaciente
                 Response.Redirect("Login.aspx")
             End If
             lblNombrePaciente.Text = Session("NombrePaciente")
-            OcultarTodosLosPaneles()
-            MostrarCitasPaciente()
+            CargarDoctores() ' Se carga al inicio para que el dropdown esté listo
+            MostrarCitasPaciente() ' Se muestra el historial desde el inicio
+            ' Ya no se ocultan los paneles, porque se controlan con pestañas Bootstrap
         End If
     End Sub
 
@@ -20,29 +21,8 @@ Public Class frmPaciente
         Response.Redirect("Login.aspx")
     End Sub
 
-    Protected Sub btnCrearCita_Click(sender As Object, e As EventArgs)
-        OcultarTodosLosPaneles()
-        pnlCrearCita.Visible = True
-        CargarDoctores()
-    End Sub
 
-    Protected Sub btnEditarCita_Click(sender As Object, e As EventArgs)
-        OcultarTodosLosPaneles()
-        pnlEditarCitaBuscar.Visible = True
-    End Sub
 
-    Protected Sub btnMostrarCitas_Click(sender As Object, e As EventArgs)
-        OcultarTodosLosPaneles()
-        pnlMostrarCitas.Visible = True
-        MostrarCitasPaciente()
-    End Sub
-
-    Private Sub OcultarTodosLosPaneles()
-        pnlCrearCita.Visible = False
-        pnlEditarCitaBuscar.Visible = False
-        pnlEditarCitaForm.Visible = False
-        pnlMostrarCitas.Visible = False
-    End Sub
 
     Private Sub CargarDoctores()
         ' Llena el DropDownList con los doctores de la base de datos
