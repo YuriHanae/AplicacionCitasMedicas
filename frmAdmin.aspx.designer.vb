@@ -210,4 +210,184 @@ Partial Public Class frmAdmin
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents gvCitas As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''Control btnMostrarCitasPendientes.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnMostrarCitasPendientes As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control btnBuscarHistorialPaciente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnBuscarHistorialPaciente As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control btnGestionarCita.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGestionarCita As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control pnlCitasPendientes.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlCitasPendientes As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control gvCitasPendientes.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents gvCitasPendientes As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''Control pnlHistorialPaciente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlHistorialPaciente As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control txtBuscarDniPaciente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtBuscarDniPaciente As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control btnBuscarDniPaciente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnBuscarDniPaciente As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control lblHistorialPacienteMsg.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblHistorialPacienteMsg As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control gvHistorialPaciente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents gvHistorialPaciente As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''Control pnlGestionarCita.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlGestionarCita As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control txtGestionarDni.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtGestionarDni As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtGestionarIdCita.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtGestionarIdCita As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control btnBuscarGestionCita.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnBuscarGestionCita As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control lblGestionarCitaMsg.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblGestionarCitaMsg As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control pnlEditarCitaAdmin.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlEditarCitaAdmin As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control txtGestionarFecha.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtGestionarFecha As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtGestionarHora.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtGestionarHora As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control ddlGestionarEstado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents ddlGestionarEstado As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control btnGuardarGestionarCita.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGuardarGestionarCita As Global.System.Web.UI.WebControls.Button
 End Class
