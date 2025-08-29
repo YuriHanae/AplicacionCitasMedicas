@@ -125,20 +125,74 @@
 
                 <div class="mt-5">
                     <h5 class="mb-3">📋 Lista de Citas</h5>
-                    <asp:GridView ID="gvCitas" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    <asp:GridView ID="gvCitas" runat="server" DataKeyNames="Id"
                         OnRowEditing="gvCitas_RowEditing"
                         CssClass="table table-hover table-bordered" GridLines="None">
-                        <Columns>
-                            <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
-                            <asp:BoundField DataField="Hora" HeaderText="Hora" DataFormatString="{0:hh\\:mm}" />
-                            <asp:BoundField DataField="NombrePaciente" HeaderText="Paciente" />
-                            <asp:BoundField DataField="NombreDoctor" HeaderText="Doctor" />
-                            <asp:BoundField DataField="Estado" HeaderText="Estado" />
-                            <asp:BoundField DataField="Observaciones" HeaderText="Observaciones" />
-                            <asp:CommandField ShowEditButton="True" />
-                        </Columns>
+                        
                     </asp:GridView>
                 </div>
+
+                <!-- ====== GESTIÓN AVANZADA DE CITAS (NUEVO) ====== -->
+
+                <div class="mb-3">
+                    <asp:Button ID="btnMostrarCitasPendientes" runat="server" Text="Citas Pendientes" CssClass="btn btn-primary me-2" OnClick="btnMostrarCitasPendientes_Click"/>
+                    <asp:Button ID="btnBuscarHistorialPaciente" runat="server" Text="Historial por DNI" CssClass="btn btn-info me-2" OnClick="btnBuscarHistorialPaciente_Click"/>
+                    <asp:Button ID="btnGestionarCita" runat="server" Text="Gestionar Cita" CssClass="btn btn-warning" OnClick="btnGestionarCita_Click"/>
+                </div>
+
+                <asp:Panel ID="pnlCitasPendientes" runat="server" Visible="False">
+                    <h6>Citas Pendientes</h6>
+                    <asp:GridView ID="gvCitasPendientes" runat="server" CssClass="table table-bordered">
+                        
+                    </asp:GridView>
+                </asp:Panel>
+
+                <asp:Panel ID="pnlHistorialPaciente" runat="server" Visible="False">
+                    <div class="mb-2">
+                        <asp:TextBox ID="txtBuscarDniPaciente" runat="server" CssClass="form-control d-inline-block" style="width:200px;" placeholder="DNI Paciente"/>
+                        <asp:Button ID="btnBuscarDniPaciente" runat="server" Text="Buscar" CssClass="btn btn-secondary ms-2" OnClick="btnBuscarDniPaciente_Click"/>
+                        <asp:Label ID="lblHistorialPacienteMsg" runat="server" CssClass="ms-2 text-danger" Visible="False"/>
+                    </div>
+                    <asp:GridView ID="gvHistorialPaciente" runat="server" CssClass="table table-bordered">
+                        
+                    </asp:GridView>
+                </asp:Panel>
+
+                <asp:Panel ID="pnlGestionarCita" runat="server" Visible="False">
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <asp:TextBox ID="txtGestionarDni" runat="server" CssClass="form-control" placeholder="DNI Paciente"/>
+                        </div>
+                        <div class="col-md-4">
+                            <asp:TextBox ID="txtGestionarIdCita" runat="server" CssClass="form-control" placeholder="ID Cita"/>
+                        </div>
+                        <div class="col-md-4">
+                            <asp:Button ID="btnBuscarGestionCita" runat="server" Text="Buscar" CssClass="btn btn-secondary" OnClick="btnBuscarGestionCita_Click"/>
+                        </div>
+                    </div>
+                    <asp:Label ID="lblGestionarCitaMsg" runat="server" CssClass="text-danger" Visible="False"/>
+                    <asp:Panel ID="pnlEditarCitaAdmin" runat="server" Visible="False">
+                        <div class="row mb-2">
+                            <div class="col-md-4">
+                                <label>Fecha</label>
+                                <asp:TextBox ID="txtGestionarFecha" runat="server" CssClass="form-control" TextMode="Date"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Hora</label>
+                                <asp:TextBox ID="txtGestionarHora" runat="server" CssClass="form-control" TextMode="Time"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Estado</label>
+                                <asp:DropDownList ID="ddlGestionarEstado" runat="server" CssClass="form-select">
+                                    <asp:ListItem Value="Pendiente" Text="Pendiente"/>
+                                    <asp:ListItem Value="Atendida" Text="Atendida"/>
+                                    <asp:ListItem Value="Atrasada" Text="Atrasada"/>
+                                </asp:DropDownList>
+                            </div>
+                        </div>
+                        <asp:Button ID="btnGuardarGestionarCita" runat="server" Text="Guardar Cambios" CssClass="btn btn-success" OnClick="btnGuardarGestionarCita_Click"/>
+                    </asp:Panel>
+                </asp:Panel>
             </div>
         </div>
     </div>

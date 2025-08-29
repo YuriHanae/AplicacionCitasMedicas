@@ -13,6 +13,10 @@ Public Class frmAdmin
             LimpiarFormulario()
             LimpiarFormularioCita()
             OcultarMensaje()
+            pnlCitasPendientes.Visible = False
+            pnlHistorialPaciente.Visible = False
+            pnlGestionarCita.Visible = False
+            pnlEditarCitaAdmin.Visible = False
         End If
     End Sub
 
@@ -105,7 +109,184 @@ Public Class frmAdmin
     End Sub
 
     ' ----------- CITAS (SOLO AGREGADO) -----------
-    Private Sub CargarListas()
+    Protected Sub btnMostrarCitasPendientes_Click(sender As Object, e As EventArgs)
+        pnlCitasPendientes.Visible = True
+        pnlHistorialPaciente.Visible = False
+        pnlGestionarCita.Visible = False
+        pnlEditarCitaAdmin.Visible = False
+        Using cn As New SqlConnection(connStr)
+            Dim query As String = "SELECT C.Id, C.Fecha, C.Hora, P.Nombre AS NombrePaciente, D.Nombre AS NombreDoctor, C.Estado, C.Observaciones
+                               FROM Citas C
+                               INNER JOIN Pacientes P ON C.IdPaciente = P.Id
+                               INNER JOIN Doctores D ON C.IdDoctor = D.Id
+                               WHERE C.Estado = 'Pendiente'
+                               ORDER BY C.Fecha, C.Hora"
+            Dim da As New SqlDataAdapter(query, cn)
+            Dim dt As New DataTable()
+            da.Fill(dt)
+            gvCitasPendientes.DataSource = dt
+            gvCitasPendientes.DataBind()
+        End Using
+        LimpiarFormularioCita()
+        CargarCitas()
+        CargarListas()
+    End Sub
+
+    Protected Sub btnBuscarHistorialPaciente_Click(sender As Object, e As EventArgs)
+        pnlCitasPendientes.Visible = False
+        pnlHistorialPaciente.Visible = True
+        pnlGestionarCita.Visible = False
+        pnlEditarCitaAdmin.Visible = False
+        gvHistorialPaciente.DataSource = Nothing
+        gvHistorialPaciente.DataBind()
+        lblHistorialPacienteMsg.Visible = False
+    End Sub
+
+    Protected Sub btnBuscarDniPaciente_Click(sender As Object, e As EventArgs)
+        gvHistorialPaciente.DataSource = Nothing
+        gvHistorialPaciente.DataBind()
+        lblHistorialPacienteMsg.Visible = False
+
+        Dim dni As String = txtBuscarDniPaciente.Text.Trim()
+        If dni = "" Then
+            lblHistorialPacienteMsg.Text = "Ingrese un DNI."
+            lblHistorialPacienteMsg.Visible = True
+            Return
+        End If
+        Using cn As New SqlConnection(connStr)
+            cn.Open()
+            Dim cmd As New SqlCommand("SELECT Id FROM Pacientes WHERE DNI = @Dni", cn)
+            cmd.Parameters.AddWithValue("@Dni", dni)
+            Dim idPacienteObj = cmd.ExecuteScalar()
+            If idPacienteObj Is Nothing Then
+                lblHistorialPacienteMsg.Text = "No se encontró paciente con ese DNI."
+                lblHistorialPacienteMsg.Visible = True
+                Return
+            End If
+            Dim idPaciente As Integer = CInt(idPacienteObj)
+            Dim consulta As String = "SELECT Id, Fecha, Hora, Estado, Observaciones FROM Citas WHERE IdPaciente = @IdPaciente ORDER BY Fecha DESC, Hora DESC"
+            Dim da As New SqlDataAdapter(consulta, cn)
+            da.SelectCommand.Parameters.AddWithValue("@IdPaciente", idPaciente)
+            Dim dt As New DataTable()
+            da.Fill(dt)
+            gvHistorialPaciente.DataSource = dt
+            gvHistorialPaciente.DataBind()
+        End Using
+        LimpiarFormularioCita()
+        CargarListas()
+    End Sub
+
+    Protected Sub btnGestionarCita_Click(sender As Object, e As EventArgs)
+        pnlCitasPendientes.Visible = False
+        pnlHistorialPaciente.Visible = False
+        pnlGestionarCita.Visible = True
+        pnlEditarCitaAdmin.Visible = False
+        lblGestionarCitaMsg.Visible = False
+    End Sub
+
+    Protected Sub btnBuscarGestionCita_Click(sender As Object, e As EventArgs)
+        pnlEditarCitaAdmin.Visible = False
+        lblGestionarCitaMsg.Visible = False
+
+        Dim dni As String = txtGestionarDni.Text.Trim()
+        Dim idCitaStr As String = txtGestionarIdCita.Text.Trim()
+        If dni = "" OrElse idCitaStr = "" Then
+            lblGestionarCitaMsg.Text = "Ingrese el DNI y el ID de la cita."
+            lblGestionarCitaMsg.Visible = True
+            Return
+        End If
+
+        Dim idCita As Integer
+        If Not Integer.TryParse(idCitaStr, idCita) Then
+            lblGestionarCitaMsg.Text = "El ID de cita debe ser un número."
+            lblGestionarCitaMsg.Visible = True
+            Return
+        End If
+
+        Using cn As New SqlConnection(connStr)
+            cn.Open()
+            Dim cmdPaciente As New SqlCommand("SELECT Id FROM Pacientes WHERE DNI = @Dni", cn)
+            cmdPaciente.Parameters.AddWithValue("@Dni", dni)
+            Dim idPacienteObj = cmdPaciente.ExecuteScalar()
+            If idPacienteObj Is Nothing Then
+                lblGestionarCitaMsg.Text = "No se encontró paciente con ese DNI."
+                lblGestionarCitaMsg.Visible = True
+                Return
+            End If
+            Dim idPaciente As Integer = CInt(idPacienteObj)
+
+            Dim cmdCita As New SqlCommand("SELECT * FROM Citas WHERE Id = @IdCita AND IdPaciente = @IdPaciente", cn)
+            cmdCita.Parameters.AddWithValue("@IdCita", idCita)
+            cmdCita.Parameters.AddWithValue("@IdPaciente", idPaciente)
+            Dim reader = cmdCita.ExecuteReader()
+            If reader.Read() Then
+                txtGestionarFecha.Text = Convert.ToDateTime(reader("Fecha")).ToString("yyyy-MM-dd")
+                txtGestionarHora.Text = TimeSpan.Parse(reader("Hora").ToString()).ToString("hh\:mm")
+                ddlGestionarEstado.SelectedValue = reader("Estado").ToString()
+                pnlEditarCitaAdmin.Visible = True
+                ViewState("GestionarIdCita") = idCita
+            Else
+                lblGestionarCitaMsg.Text = "No se encontró esa cita para ese paciente."
+                lblGestionarCitaMsg.Visible = True
+            End If
+            reader.Close()
+        End Using
+        LimpiarFormularioCita()
+        CargarListas()
+    End Sub
+
+    Protected Sub btnGuardarGestionarCita_Click(sender As Object, e As EventArgs)
+        lblGestionarCitaMsg.Visible = False
+        Dim idCita = ViewState("GestionarIdCita")
+        If idCita Is Nothing Then
+            lblGestionarCitaMsg.Text = "No hay cita seleccionada para gestionar."
+            lblGestionarCitaMsg.Visible = True
+            Return
+        End If
+        Dim nuevaFecha As Date
+        Dim nuevaHora As TimeSpan
+        If Not Date.TryParse(txtGestionarFecha.Text, nuevaFecha) Then
+            lblGestionarCitaMsg.Text = "Fecha inválida."
+            lblGestionarCitaMsg.Visible = True
+            Return
+        End If
+        If Not TimeSpan.TryParse(txtGestionarHora.Text, nuevaHora) Then
+            lblGestionarCitaMsg.Text = "Hora inválida."
+            lblGestionarCitaMsg.Visible = True
+            Return
+        End If
+        Dim nuevoEstado As String = ddlGestionarEstado.SelectedValue
+        Using cn As New SqlConnection(connStr)
+            cn.Open()
+            Dim cmd As New SqlCommand("UPDATE Citas SET Fecha=@Fecha, Hora=@Hora, Estado=@Estado WHERE Id=@Id", cn)
+            cmd.Parameters.AddWithValue("@Fecha", nuevaFecha)
+            cmd.Parameters.AddWithValue("@Hora", nuevaHora)
+            cmd.Parameters.AddWithValue("@Estado", nuevoEstado)
+            cmd.Parameters.AddWithValue("@Id", idCita)
+            cmd.ExecuteNonQuery()
+        End Using
+        lblGestionarCitaMsg.Text = "Cambios guardados correctamente."
+        lblGestionarCitaMsg.CssClass = "text-success mb-2"
+        lblGestionarCitaMsg.Visible = True
+        pnlEditarCitaAdmin.Visible = False
+        btnMostrarCitasPendientes_Click(Nothing, Nothing)
+        LimpiarFormularioCita()
+        CargarListas()
+    End Sub
+
+    Public Sub LimpiarFormularioCita()
+        hfIdCita.Value = ""
+        txtFecha.Text = ""
+        txtHora.Text = ""
+        ddlPaciente.ClearSelection()
+        ddlDoctor.ClearSelection()
+        ddlEstado.ClearSelection()
+        txtObservaciones.Text = ""
+        lblCitasMensaje.Text = ""
+        lblCitasMensaje.CssClass = "alert d-none"
+    End Sub
+
+    Public Sub CargarListas()
         Using cn As New SqlConnection(connStr)
             cn.Open()
             ' Pacientes
@@ -128,41 +309,19 @@ Public Class frmAdmin
         End Using
     End Sub
 
-    Private Sub CargarCitas()
+    Public Sub CargarCitas()
         Using cn As New SqlConnection(connStr)
             Dim consulta As String = "
-                SELECT C.Id, C.Fecha, C.Hora, P.Nombre AS NombrePaciente, D.Nombre AS NombreDoctor, C.Estado, C.Observaciones
-                FROM Citas C
-                INNER JOIN Pacientes P ON C.IdPaciente = P.Id
-                INNER JOIN Doctores D ON C.IdDoctor = D.Id"
+            SELECT C.Id, C.Fecha, C.Hora, P.Nombre AS NombrePaciente, D.Nombre AS NombreDoctor, C.Estado, C.Observaciones
+            FROM Citas C
+            INNER JOIN Pacientes P ON C.IdPaciente = P.Id
+            INNER JOIN Doctores D ON C.IdDoctor = D.Id"
             Dim adaptador As New SqlDataAdapter(consulta, cn)
             Dim tabla As New DataTable()
             adaptador.Fill(tabla)
             gvCitas.DataSource = tabla
+            gvCitas.DataBind()
         End Using
-    End Sub
-
-    Protected Sub gvCitas_RowEditing(sender As Object, e As GridViewEditEventArgs)
-        Dim id = gvCitas.DataKeys(e.NewEditIndex).Value.ToString()
-
-        Using cn As New SqlConnection(connStr)
-            Dim cmd As New SqlCommand("SELECT * FROM Citas WHERE Id=@Id", cn)
-            cmd.Parameters.AddWithValue("@Id", id)
-            cn.Open()
-            Dim lector = cmd.ExecuteReader()
-            If lector.Read() Then
-                hfIdCita.Value = lector("Id").ToString()
-                txtFecha.Text = Convert.ToDateTime(lector("Fecha")).ToString("yyyy-MM-dd")
-                txtHora.Text = TimeSpan.Parse(lector("Hora").ToString()).ToString("hh\:mm")
-                ddlPaciente.SelectedValue = lector("IdPaciente").ToString()
-                ddlDoctor.SelectedValue = lector("IdDoctor").ToString()
-                ddlEstado.SelectedValue = lector("Estado").ToString()
-                txtObservaciones.Text = lector("Observaciones").ToString()
-            End If
-        End Using
-
-        gvCitas.EditIndex = -1
-        CargarCitas()
     End Sub
 
     Protected Sub btnGuardarCita_Click(sender As Object, e As EventArgs)
@@ -195,23 +354,35 @@ Public Class frmAdmin
             lblCitasMensaje.Text = "✅ Cita guardada correctamente."
             lblCitasMensaje.CssClass = "alert alert-success"
             LimpiarFormularioCita()
-            CargarCitas()
+
         End If
     End Sub
 
     Protected Sub btnCancelarCita_Click(sender As Object, e As EventArgs)
         LimpiarFormularioCita()
+
     End Sub
 
-    Private Sub LimpiarFormularioCita()
-        hfIdCita.Value = ""
-        txtFecha.Text = ""
-        txtHora.Text = ""
-        ddlPaciente.ClearSelection()
-        ddlDoctor.ClearSelection()
-        ddlEstado.ClearSelection()
-        txtObservaciones.Text = ""
-        lblCitasMensaje.Text = ""
-        lblCitasMensaje.CssClass = "alert d-none"
+    Protected Sub gvCitas_RowEditing(sender As Object, e As GridViewEditEventArgs)
+        Dim id = gvCitas.DataKeys(e.NewEditIndex).Value.ToString()
+
+        Using cn As New SqlConnection(connStr)
+            Dim cmd As New SqlCommand("SELECT * FROM Citas WHERE Id=@Id", cn)
+            cmd.Parameters.AddWithValue("@Id", id)
+            cn.Open()
+            Dim lector = cmd.ExecuteReader()
+            If lector.Read() Then
+                hfIdCita.Value = lector("Id").ToString()
+                txtFecha.Text = Convert.ToDateTime(lector("Fecha")).ToString("yyyy-MM-dd")
+                txtHora.Text = TimeSpan.Parse(lector("Hora").ToString()).ToString("hh\:mm")
+                ddlPaciente.SelectedValue = lector("IdPaciente").ToString()
+                ddlDoctor.SelectedValue = lector("IdDoctor").ToString()
+                ddlEstado.SelectedValue = lector("Estado").ToString()
+                txtObservaciones.Text = lector("Observaciones").ToString()
+            End If
+        End Using
+
+        gvCitas.EditIndex = -1
+        CargarCitas()
     End Sub
 End Class
