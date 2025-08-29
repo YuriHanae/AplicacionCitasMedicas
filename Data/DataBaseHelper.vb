@@ -82,4 +82,16 @@ Public Class DataBaseHelper
             End If
         End Using
     End Function
+
+    Public Function RegistrarUsuario(paciente As Paciente) As Boolean
+        Using connection As New SqlConnection(connectionString)
+            connection.Open()
+            Dim command As New SqlCommand("INSERT INTO Usuarios (Usuario, Contraseña, Rol) VALUES (@Usuario, @Contraseña, @Rol)", connection)
+            command.Parameters.AddWithValue("@Usuario", paciente.Usuario)
+            command.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
+            command.Parameters.AddWithValue("@Rol", paciente.Rol)
+            Dim rowsAffected As Integer = command.ExecuteNonQuery()
+            Return rowsAffected > 0
+        End Using
+    End Function
 End Class

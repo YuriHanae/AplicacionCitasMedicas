@@ -26,9 +26,11 @@ Public Class Login
     Protected Function VerificarCredenciales() As Boolean
 
         Dim rol As String = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, txtPass.Text)
+        Dim wrapper As New Simple3Des("claveclavecita")
+        Dim pass As String = wrapper.EncryptData(txtPass.Text)
         Dim paciente As New Paciente With {
             .Usuario = txtUsuario.Text.Trim(),
-            .Contraseña = txtPass.Text.Trim(),
+            .Contraseña = pass,
             .Rol = rol
         }
         Return bd.VerificarCredenciales(paciente)
