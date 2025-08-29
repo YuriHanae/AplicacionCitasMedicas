@@ -3,24 +3,24 @@
 Public Class DataBaseHelper
     Private ReadOnly connectionString As String = ConfigurationManager.ConnectionStrings("Login").ConnectionString
 
-    Public Function VerificarCredenciales(paciente As Paciente) As Boolean
+    Public Function VerificarCredenciales(usuarios As String, contrasena As String, rol As String) As Boolean
         Using connection As New SqlConnection(connectionString)
             connection.Open()
             Dim command As New SqlCommand("SELECT  Usuario,Contraseña  FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña AND ROL = @Rol", connection)
-            command.Parameters.AddWithValue("@Usuario", paciente.Usuario)
-            command.Parameters.AddWithValue("@Contraseña", paciente.Contraseña)
-            command.Parameters.AddWithValue("@Rol", paciente.Rol)
+            command.Parameters.AddWithValue("@Usuario", usuarios)
+            command.Parameters.AddWithValue("@Contraseña", contrasena)
+            command.Parameters.AddWithValue("@Rol", rol)
             Dim reader As SqlDataReader = command.ExecuteReader()
             Return reader.HasRows
         End Using
     End Function
 
-    Public Function ObtenerRolDeBaseDeDatos(usuario As String, contra As String) As String
+    Public Function ObtenerRolDeBaseDeDatos(usuario, contrasena) As String
         Using conn As New SqlConnection(connectionString)
             conn.Open()
             Dim cmd As New SqlCommand("SELECT Rol FROM Usuarios WHERE Usuario = @Usuario AND Contraseña = @Contraseña", conn)
             cmd.Parameters.AddWithValue("@Usuario", usuario)
-            cmd.Parameters.AddWithValue("@Contraseña", contra)
+            cmd.Parameters.AddWithValue("@Contraseña", contrasena)
             Dim reader As SqlDataReader = cmd.ExecuteReader()
 
             If reader.Read() Then

@@ -8,9 +8,11 @@ Public Class Login
     End Sub
 
     Protected Sub btnLogin_Click(sender As Object, e As EventArgs)
+        Dim wrapper As New Simple3Des("claveclavecita")
+        Dim pass As String = wrapper.EncryptData(txtPass.Text)
         If VerificarCredenciales() Then
             ' Asignar el rol y el usuario a la sesión
-            Session("Rol") = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, txtPass.Text)
+            Session("Rol") = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, pass)
             Session("Usuario") = txtUsuario.Text.Trim()
 
             If (Session("Rol") = "Admin") Then
@@ -26,15 +28,11 @@ Public Class Login
 
     Protected Function VerificarCredenciales() As Boolean
 
-        Dim rol As String = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text, txtPass.Text)
         Dim wrapper As New Simple3Des("claveclavecita")
         Dim pass As String = wrapper.EncryptData(txtPass.Text)
-        Dim paciente As New Paciente With {
-            .Usuario = txtUsuario.Text.Trim(),
-            .Contraseña = txtPass.Text,
-            .Rol = rol
-        }
-        Return bd.VerificarCredenciales(paciente)
+        Dim rol As String = bd.ObtenerRolDeBaseDeDatos(txtUsuario.Text.Trim(), pass)
+
+        Return bd.VerificarCredenciales(txtUsuario.Text.Trim(), pass, rol)
     End Function
 
 

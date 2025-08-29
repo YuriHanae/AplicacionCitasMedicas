@@ -4,13 +4,23 @@ Public Class Registrar
     Inherits System.Web.UI.Page
 
     Protected Sub btnRegistrar_Click(sender As Object, e As EventArgs)
-        Dim nombre As String = txtNombre.Text.Trim()
-        Dim apellido As String = txtApellido.Text.Trim()
-        Dim dni As String = txtDNI.Text.Trim()
-        Dim telefono As String = txtTelefono.Text.Trim()
-        Dim email As String = txtEmail.Text.Trim()
-        Dim usuario As String = txtUsuario.Text.Trim()
-        Dim contrasena As String = txtContrasena.Text.Trim()
+        Dim paciente As New Paciente With {
+            .Nombre = txtNombre.Text.Trim(),
+            .Apellido = txtApellido.Text.Trim(),
+            .DNI = txtDNI.Text.Trim(),
+            .Telefono = txtTelefono.Text.Trim(),
+            .Email = txtEmail.Text.Trim(),
+            .Usuario = txtUsuario.Text.Trim(),
+            .Contraseña = txtContrasena.Text.Trim()
+        }
+        Dim nombre As String = paciente.Nombre
+        Dim apellido As String = paciente.Apellido
+        Dim dni As String = paciente.DNI
+        Dim telefono As String = paciente.Telefono
+        Dim email As String = paciente.Email
+        Dim usuario As String = paciente.Usuario
+        Dim wrapper As New Simple3Des("claveclavecita")
+        Dim contrasena As String = wrapper.EncryptData(paciente.Contraseña)
 
         If nombre = "" Or apellido = "" Or dni = "" Or telefono = "" Or email = "" Or usuario = "" Or contrasena = "" Then
             lblMensaje.Text = "Todos los campos son obligatorios."
@@ -24,6 +34,7 @@ Public Class Registrar
             cn.Open()
             Dim trans As SqlTransaction = cn.BeginTransaction()
             Try
+
                 ' Insertar en Pacientes
                 Dim cmdPaciente As New SqlCommand("INSERT INTO Pacientes (Nombre, Apellido, DNI, Telefono, Email, Usuario, Contraseña) VALUES (@Nombre, @Apellido, @DNI, @Telefono, @Email, @Usuario, @Contrasena)", cn, trans)
                 cmdPaciente.Parameters.AddWithValue("@Nombre", nombre)

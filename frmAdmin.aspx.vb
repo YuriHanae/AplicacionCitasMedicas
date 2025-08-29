@@ -3,7 +3,7 @@
 Public Class frmAdmin
     Inherits System.Web.UI.Page
 
-    Private connStr As String = ConfigurationManager.ConnectionStrings("Login").ConnectionString
+    Private ReadOnly connStr As String = ConfigurationManager.ConnectionStrings("Login").ConnectionString
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
@@ -33,7 +33,8 @@ Public Class frmAdmin
         Dim telefono As String = txtTelefono.Text.Trim()
         Dim email As String = txtEmail.Text.Trim()
         Dim usuario As String = txtUsuario.Text.Trim()
-        Dim contrasena As String = txtContrasena.Text.Trim()
+        Dim wrapper As New Simple3Des("claveclavecita")
+        Dim contrasena As String = wrapper.EncryptData(txtContrasena.Text)
 
         If nombre = "" Or especialidad = "" Or telefono = "" Or email = "" Or usuario = "" Or contrasena = "" Then
             lblMensaje.Text = "Todos los campos son obligatorios."
@@ -46,18 +47,26 @@ Public Class frmAdmin
             cn.Open()
             Dim trans As SqlTransaction = cn.BeginTransaction()
             Try
+                Dim empleado As New Doctor With {
+                    .Nombre = nombre,
+                    .Especialidad = especialidad,
+                    .Telefono = telefono,
+                    .Email = email,
+                    .Usuario = usuario,
+                    .Contraseña = contrasena
+                }
                 Dim cmdDoctor As New SqlCommand("INSERT INTO Doctores (Nombre, Especialidad, Telefono, Email, Usuario, Contraseña) VALUES (@Nombre, @Especialidad, @Telefono, @Email, @Usuario, @Contrasena)", cn, trans)
-                cmdDoctor.Parameters.AddWithValue("@Nombre", nombre)
-                cmdDoctor.Parameters.AddWithValue("@Especialidad", especialidad)
-                cmdDoctor.Parameters.AddWithValue("@Telefono", telefono)
-                cmdDoctor.Parameters.AddWithValue("@Email", email)
-                cmdDoctor.Parameters.AddWithValue("@Usuario", usuario)
-                cmdDoctor.Parameters.AddWithValue("@Contrasena", contrasena)
+                cmdDoctor.Parameters.AddWithValue("@Nombre", empleado.Nombre)
+                cmdDoctor.Parameters.AddWithValue("@Especialidad", empleado.Especialidad)
+                cmdDoctor.Parameters.AddWithValue("@Telefono", empleado.Telefono)
+                cmdDoctor.Parameters.AddWithValue("@Email", empleado.Email)
+                cmdDoctor.Parameters.AddWithValue("@Usuario", empleado.Usuario)
+                cmdDoctor.Parameters.AddWithValue("@Contrasena", empleado.Contraseña)
                 cmdDoctor.ExecuteNonQuery()
 
                 Dim cmdUsuario As New SqlCommand("INSERT INTO Usuarios (Usuario, Contraseña, Rol) VALUES (@Usuario, @Contrasena, 'Admin')", cn, trans)
-                cmdUsuario.Parameters.AddWithValue("@Usuario", usuario)
-                cmdUsuario.Parameters.AddWithValue("@Contrasena", contrasena)
+                cmdUsuario.Parameters.AddWithValue("@Usuario", empleado.Usuario)
+                cmdUsuario.Parameters.AddWithValue("@Contrasena", empleado.Contraseña)
                 cmdUsuario.ExecuteNonQuery()
 
                 trans.Commit()
@@ -130,12 +139,11 @@ Public Class frmAdmin
 
     Private Sub CargarCitas()
         Using cn As New SqlConnection(connStr)
-            Dim consulta As String = "
-                SELECT C.Id, C.Fecha, C.Hora, P.Nombre AS NombrePaciente, D.Nombre AS NombreDoctor, C.Estado, C.Observaciones
+            Dim cmd As New SqlCommand("SELECT C.Id, C.Fecha, C.Hora, P.Nombre AS NombrePaciente, D.Nombre AS NombreDoctor, C.Estado, C.Observaciones
                 FROM Citas C
                 INNER JOIN Pacientes P ON C.IdPaciente = P.Id
-                INNER JOIN Doctores D ON C.IdDoctor = D.Id"
-            Dim adaptador As New SqlDataAdapter(consulta, cn)
+                INNER JOIN Doctores D ON C.IdDoctor = D.Id", cn)
+            Dim adaptador As New SqlDataAdapter(cmd)
             Dim tabla As New DataTable()
             adaptador.Fill(tabla)
             gvCitas.DataSource = tabla
