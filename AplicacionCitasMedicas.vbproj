@@ -146,6 +146,7 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="frmAdmin.aspx" />
+    <Content Include="frmDoctores.aspx" />
     <Content Include="frmPaciente.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
@@ -226,7 +227,8 @@
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="DataBaseHelper.vb" />
+    <Compile Include="Data\DataBaseHelper.vb" />
+    <Compile Include="Data\Simple3Des.vb" />
     <Compile Include="Default.aspx.vb">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>Default.aspx</DependentUpon>
@@ -234,12 +236,19 @@
     <Compile Include="Default.aspx.designer.vb">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Doctor.vb" />
+    <Compile Include="Models\Doctor.vb" />
     <Compile Include="frmAdmin.aspx.designer.vb">
       <DependentUpon>frmAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="frmAdmin.aspx.vb">
       <DependentUpon>frmAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="frmDoctores.aspx.designer.vb">
+      <DependentUpon>frmDoctores.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="frmDoctores.aspx.vb">
+      <DependentUpon>frmDoctores.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="frmPaciente.aspx.designer.vb">
@@ -278,7 +287,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Paciente.vb" />
+    <Compile Include="Models\Paciente.vb" />
     <Compile Include="Registrar.aspx.designer.vb">
       <DependentUpon>Registrar.aspx</DependentUpon>
     </Compile>

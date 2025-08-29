@@ -139,7 +139,6 @@ Public Class frmAdmin
             Dim tabla As New DataTable()
             adaptador.Fill(tabla)
             gvCitas.DataSource = tabla
-            gvCitas.DataBind()
         End Using
     End Sub
 

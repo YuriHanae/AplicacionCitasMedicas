@@ -212,11 +212,11 @@ Partial Public Class frmPaciente
     Protected WithEvents pnlMostrarCitas As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''Control gvCitas.
+    '''Control gvDatos.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents gvCitas As Global.System.Web.UI.WebControls.GridView
+    Protected WithEvents gvDatos As Global.System.Web.UI.WebControls.GridView
 End Class
